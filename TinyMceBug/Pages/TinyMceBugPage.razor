@@ -1,0 +1,48 @@
+﻿@page "/"
+@using TinyMCE.Blazor
+
+<PageTitle>Bug example</PageTitle>
+<div style="padding: 2rem; font-family: Roboto; font-size: 16px">
+    <h1>
+        There are two bugs
+    </h1>
+    <ol>
+        <li>Open the Console in the web browser and observe as you write</li>
+        <li>Comment on the text and save. This will be logged to the console</li>
+        <li>Edit the comment you just saved. Observe how nothing is logged to the console. <b>This is the bug</b></li>
+        <li>Add another comment in the conversation and save. This will be logged to the console</li>
+        <li>Delete the comment from the conversation, leaving one comment left. Observe how nothing is logged to the console. <b>This is also a bug</b></li>
+    </ol>
+</div>
+
+<div style="max-width: 800px; margin: auto">
+    <Editor Id="@Guid.NewGuid().ToString()"
+            Conf="@Config()"
+            Value="@_value"
+            CloudChannel="6"
+            ValueChanged="@OnValueChange"
+            ApiKey="p50xea2irhmblp62xqeo010njrv0vmwea0iu6d8mas209mqd"
+            /> 
+</div>
+
+
+@code {
+    private string _value = "Here is a text you can comment on";
+    
+    private static Dictionary<string, object> Config() => new()
+    {
+        { "menubar", false },
+        { "plugins", "tinycomments" },
+        { "toolbar", "addcomment showcomments" },
+        { "min_height", 450 },
+        { "tinycomments_mode", "embedded" },
+        { "tinycomments_author", "author" },
+        { "sidebar_show", "showcomments" }
+    };
+
+    private void OnValueChange(string text)
+    {
+        _value = text;
+        Console.WriteLine("Text has changed: "+ text);
+    }
+}
